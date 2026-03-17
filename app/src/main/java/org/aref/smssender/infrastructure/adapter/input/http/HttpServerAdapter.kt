@@ -81,7 +81,7 @@ class HttpServerAdapter(
 
             val request = gson.fromJson(body, SendSmsRequest::class.java)
             val smsMessage = request.toDomain()
-            SmsLog.info("Enviando SMS a ${smsMessage.to} (sim_slot=${smsMessage.simSlot ?: "default"})")
+            SmsLog.info("Enviando SMS a ${smsMessage.to} (sim configurada en servidor)")
 
             // Ejecutar caso de uso
             when (val result = sendSmsUseCase.sendSms(smsMessage)) {

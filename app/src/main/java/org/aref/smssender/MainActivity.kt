@@ -60,6 +60,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -426,7 +427,7 @@ fun HelpDialog(apiKey: String, ipAddress: String, port: String, onDismiss: () ->
                 SelectionContainer {
                     Text(
                         text = buildString {
-                            appendLine("POST /send-sms  o  /api/sendsms")
+                            appendLine("POST /api/sendsms")
                             appendLine()
                             appendLine("Headers:")
                             appendLine("  Content-Type: application/json")
@@ -438,19 +439,12 @@ fun HelpDialog(apiKey: String, ipAddress: String, port: String, onDismiss: () ->
                             appendLine("  \"message\": \"Hola mundo\",")
                             appendLine("  \"data_coding\": 8,")
                             appendLine("  \"status\": true,")
-                            appendLine("  \"sim_slot\": 1")
                             appendLine("}")
-                            appendLine()
-                            appendLine("sim_slot (opcional):")
-                            appendLine("  omitido = SIM configurada")
-                            appendLine("  1 = SIM 1  |  2 = SIM 2")
-                            appendLine()
-                            appendLine("Acepta \"to\" en vez de \"phone\"")
                             appendLine()
                             appendLine("--- Ejemplo curl ---")
                             appendLine()
                             appendLine("curl -X POST \\")
-                            appendLine("  http://$ipAddress:$port/send-sms \\")
+                            appendLine("  http://$ipAddress:$port/api/sendsms \\")
                             appendLine("  -H \"Content-Type: application/json\" \\")
                             appendLine("  -H \"x-api-key: $apiKey\" \\")
                             appendLine("  -d '{")

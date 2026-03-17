@@ -9,7 +9,7 @@
 - 🌐 **Servidor HTTP embebido** (NanoHTTPD) que escucha peticiones REST locales
 - 📤 **Envío de SMS** a través de la API nativa de Android
 - 🔐 **Autenticación mediante API Key** en cabecera HTTP
-- 📶 **Soporte multi-SIM**: selección de ranura SIM por petición o configuración global
+- 📶 **Soporte multi-SIM**: la ranura SIM se configura desde la app
 - 🔔 **Servicio en primer plano** con notificación persistente
 - 📋 **Registro de logs** en tiempo real desde la interfaz
 - ⚙️ **Configuración persistente**: puerto, API Key y SIM predeterminada guardados en SharedPreferences
@@ -79,7 +79,7 @@ adb install app/build/outputs/apk/debug/app-debug.apk
 1. Abre la aplicación en el dispositivo.
 2. Se genera automáticamente una **API Key** aleatoria (UUID).
 3. Configura el **puerto** si lo deseas (por defecto: `8080`).
-4. Selecciona la **SIM predeterminada** si el dispositivo tiene dual-SIM.
+4. Selecciona la **SIM predeterminada** si el dispositivo tiene dual-SIM. Esta selección es fija para todas las peticiones; el cliente externo no puede cambiarla.
 5. Pulsa **Iniciar servidor**.
 
 ---
@@ -104,17 +104,15 @@ POST http://<IP_DEL_DISPOSITIVO>:8080/api/sendsms
 Solo se ha probado con números del Perú(sin codigo-directo)
 ```json
 {
-  "to": "987654321",
-  "message": "Hola desde SmsSender!",
-  "sim_slot": 1
+  "phone": "987654321",
+  "message": "Hola desde SmsSender!"
 }
 ```
 
 | Campo | Tipo | Requerido | Descripción |
 |---|---|---|---|
-| `to` / `phone` | `string` | ✅ | Número de teléfono destino |
+| `phone` | `string` | ✅ | Número de teléfono destino |
 | `message` | `string` | ✅ | Texto del SMS |
-| `sim_slot` | `integer` | ❌ | Ranura SIM (1, 2...). Si se omite, usa la predeterminada |
 | `data_coding` | `integer` | ❌ | Codificación del mensaje |
 | `status` | `boolean` | ❌ | Solicitar reporte de estado |
 
@@ -175,7 +173,7 @@ La aplicación requiere los siguientes permisos:
 curl -X POST http://192.168.1.100:8080/api/sendsms \
   -H "Content-Type: application/json" \
   -H "x-api-key: TU_API_KEY" \
-  -d '{"to": "+34612345678", "message": "Test desde cURL"}'
+  -d '{"phone": "999999999", "message": "Test desde cURL"}'
 ```
 
 ---
@@ -186,6 +184,7 @@ curl -X POST http://192.168.1.100:8080/api/sendsms \
 - La `API Key` se genera automáticamente en el primer arranque y `puede cambiarse` desde la interfaz.
 - El servidor se ejecuta como **Foreground Service** para evitar que el sistema operativo lo cierre.
 - El log de actividad muestra en tiempo real las peticiones recibidas y el estado de cada SMS.
+- **La SIM es controlada únicamente por el servidor**: el administrador del dispositivo elige la ranura SIM desde la app antes de iniciar el servidor. El cliente HTTP no tiene ningún mecanismo para seleccionar ni cambiar la SIM usada.
 
 ---
 
